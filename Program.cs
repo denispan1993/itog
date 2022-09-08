@@ -1,6 +1,6 @@
 ﻿
 Console.Clear();
-Console.WriteLine(@"Введите строки через запятую в следующем формате: ""hello"",""2"",""world"","":-)"" или в формате: hello,2,world,:-) ");
+Console.WriteLine(@"Введите строки через запятую в следующем формате: [""hello"",""2"",""world"","":-)""] или в формате: [hello,2,world,:-)] ");
 //Считываем строку из консоли и заполняем массив строками
 string[] readLineArray = FillMyArray(Console.ReadLine());
 //Проверяем какие строки меньше либо равны 3 символа и возвращаем массив
@@ -12,7 +12,8 @@ PrintStringArray(testLineArray);
 string[] FillMyArray(string readLineArray) 
 { 
      //Разбиваем строку по , на массив
-     string[] inArray = readLineArray.Split(',');
+     string readLineArray2 = SubArrayString(readLineArray,"[","]"); 
+     string[] inArray = readLineArray2.Split(',');
      return inArray;
 }
 
@@ -25,7 +26,7 @@ string[] TestLineArray(string[] inArray)
     int counterNewArray = 0;
     for(int count = 0; count < lenght; count++)
     {  //убираем кавычки если они введены 
-       string trimElement = inArray[count].Trim('"');
+       string trimElement = SubArrayString(inArray[count],"\"","\"");
        //проверяем условие, есть ли длина строки  3 или меньше символа
        if (trimElement.Length <= 3) counterNewArray++;  
     }
@@ -37,7 +38,7 @@ string[] TestLineArray(string[] inArray)
         for(int count = 0; count < lenght; count++)
         {  
             //убираем кавычки если они изначально введены
-            string trimElement = inArray[count].Trim('"');
+            string trimElement = SubArrayString(inArray[count],"\"","\"");
             //Проверяем длину строки
             if (trimElement.Length <= 3) 
             {
@@ -57,15 +58,30 @@ void PrintStringArray(string[] inArray)
 {
     Console.WriteLine("Итоговый массив:");
     int i = 0;
-
+    Console.Write("[");
     while(i < inArray.Length - 1)
     {
         Console.Write(inArray[i]+",");
         i++;
     }
-    Console.WriteLine(inArray[i]);
+    Console.WriteLine(inArray[i]+"]"); 
 }
 
  
-
+//метод который проверяет есть ли в строке [] или "" и убирает их в начале и в конце
+string SubArrayString (string arrayPre, string objectSubFirst, string objectSubLast) {
+      string strOut = arrayPre;
+      //Получаем первый символ
+      string strFirst = arrayPre.Substring(0,1);
+      //Получаем последний символ
+      string strLast =  arrayPre.Substring(arrayPre.Length-1);
+     if (strFirst == objectSubFirst && strLast == objectSubLast) { 
+         //Обрезаем первый символ
+         strOut = arrayPre.Substring(1);
+         //Обрезаем последний символ
+         strOut = strOut.Substring(0, strOut.Length - 1);
+          
+     } 
+     return strOut;
+}
 
